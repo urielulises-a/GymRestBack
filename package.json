@@ -1,0 +1,51 @@
+{
+  "name": "gymrestback",
+  "version": "1.0.0",
+  "description": "API REST para gimnasio con Express y SQLite",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon src/server.js",
+    "start": "node src/server.js",
+    "migrate": "node scripts/run-migrations.js",
+    "seed": "node scripts/run-seeds.js",
+    "db:reset": "npm run migrate && npm run seed",
+    "test": "cross-env NODE_ENV=test jest --runInBand --passWithNoTests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/urielulises-a/GymRestBack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/urielulises-a/GymRestBack/issues"
+  },
+  "homepage": "https://github.com/urielulises-a/GymRestBack#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "json2csv": "^6.0.0-alpha.2",
+    "jsonwebtoken": "^9.0.2",
+    "luxon": "^3.7.2",
+    "morgan": "^1.10.1",
+    "node-cron": "^4.2.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.1.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.js"
+    ]
+  }
+}
