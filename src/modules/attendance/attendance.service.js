@@ -99,7 +99,7 @@ function checkIn(memberId) {
     throw new Error('Miembro no válido');
   }
   ensureActiveSubscription(memberId);
-  const existing = db.prepare('SELECT id FROM attendance WHERE member_id = ? AND status = "En curso"').get(memberId);
+  const existing = db.prepare("SELECT id FROM attendance WHERE member_id = ? AND status = 'En curso'").get(memberId);
   if (existing) {
     throw new Error('Ya existe un check-in en curso');
   }

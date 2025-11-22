@@ -9,13 +9,14 @@ router.get('/summary', (req, res) => success(res, reportsService.getSummary()));
 
 router.get('/export-csv', (req, res) => {
   const summary = reportsService.getSummary();
-  const rows = summary.revenueByMonth.map((item) => ({
+  const rows = summary.revenue.monthly.map((item) => ({
     metric: `Ingresos ${item.month}`,
     value: item.amount
   }));
   rows.push(
-    { metric: 'Miembros activos', value: summary.activeMembers },
-    { metric: 'Ingreso total', value: summary.totalRevenue },
+    { metric: 'Miembros activos', value: summary.members.active },
+    { metric: 'Total miembros', value: summary.members.total },
+    { metric: 'Ingreso total', value: summary.revenue.total },
     { metric: 'Asistencia promedio %', value: summary.avgAttendance },
     { metric: 'Renovación %', value: summary.renewalRate }
   );

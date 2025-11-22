@@ -60,17 +60,52 @@ function getSummary() {
   const totalPlans = planDistributionRaw.reduce((acc, item) => acc + item.total, 0) || 1;
   const planDistribution = planDistributionRaw.map((item) => ({
     planName: item.planName,
-    percentage: ((item.total / totalPlans) * 100).toFixed(2)
+    count: item.total,
+    percentage: Number(((item.total / totalPlans) * 100).toFixed(2))
   }));
 
+  // Obtener pagos recientes
+  const recentPayments = db
+    .prepare(
+      `SELECT p.id, p.amount, p.method, p.status, p.payment_date,
+              m.name as memberName
+       FROM payments p
+       LEFT JOIN members m ON p.member_id = m.id
+       ORDER BY p.payment_date DESC
+       LIMIT 10`
+    )
+    .all();
+
+  // Obtener total de miembros y crecimiento del mes actual
+  const totalMembers = db.prepare('SELECT COUNT(*) as total FROM members').get().total || 0;
+  const currentMonthStart = DateTime.now().startOf('month').toISO();
+  const growth = db
+    .prepare('SELECT COUNT(*) as total FROM members WHERE join_date >= ?')
+    .get(currentMonthStart).total || 0;
+
+  // Retornar con la estructura esperada por el frontend
   return {
-    totalRevenue,
-    activeMembers,
+    revenue: {
+      total: totalRevenue,
+      monthly: revenueByMonth
+    },
+    members: {
+      total: totalMembers,
+      active: activeMembers,
+      growth: growth
+    },
+    planDistribution,
+    recentPayments: recentPayments.map((p) => ({
+      id: p.id,
+      memberName: p.memberName,
+      amount: p.amount,
+      method: p.method,
+      status: p.status,
+      date: p.payment_date
+    })),
     avgAttendance: Number(avgAttendance),
     renewalRate: Number(renewalRate),
-    revenueByMonth,
-    memberGrowth,
-    planDistribution
+    memberGrowth
   };
 }
 

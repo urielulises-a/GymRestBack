@@ -20,12 +20,17 @@ const app = express();
 
 const allowedOrigins = ENV.FRONTEND_ORIGIN.split(',').map((origin) => origin.trim());
 
+console.log('Orígenes permitidos:', allowedOrigins);
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      console.log('Petición desde origen:', origin);
+      // Permitir peticiones sin origen (Postman, curl, etc.) o desde localhost
+      if (!origin || allowedOrigins.includes(origin) || origin.startsWith('http://localhost:')) {
         return callback(null, origin);
       }
+      console.log('Origen rechazado:', origin);
       return callback(new Error('Origen no permitido'));
     },
     credentials: true
