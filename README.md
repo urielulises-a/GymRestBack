@@ -54,7 +54,6 @@ Diagrama entidad-relación del esquema:
 
 ```mermaid
 erDiagram
-    users ||--o{ : ""
     plans ||--o{ members : "tiene"
     plans ||--o{ subscriptions : "incluye"
     members ||--o{ subscriptions : "tiene"
